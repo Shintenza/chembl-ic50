@@ -1,0 +1,8 @@
+pandas==2.1.4
+numpy==1.26.4
+rdkit==2025.9.3
+apache-airflow==3.1.0
+psycopg[binary]
+pyarrow==22.0.0
+apache-airflow-providers-postgres==6.5.1
+scikit-learn==1.8
