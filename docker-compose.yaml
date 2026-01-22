@@ -29,11 +29,13 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__AUTH_MANAGER: airflow.providers.fab.auth_manager.fab_auth_manager.FabAuthManager
       CHEMBL_SQL_ALCHEMY_CONN: postgresql+psycopg2://chembl:chembl@postgres:5432/chembl
+      PYTHONPATH: /app
     ports:
       - "8080:8080"
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/data:/opt/airflow/data
+      - ./src:/app/src
+      - ./data:/data
     command: >
       bash -c "
       airflow db migrate &&

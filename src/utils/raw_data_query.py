@@ -25,9 +25,10 @@ AND a.standard_value > 0
 AND a.standard_units IS NOT NULL
 AND a.standard_units IN ('nM', 'ug.mL-1')
 AND a.standard_relation = '='
+AND a.potential_duplicate = 0
 AND md.black_box_warning = 0
 """
 
-def get_data_query()->str:
-    return RAW_DATA_SQL
 
+def get_data_query() -> str:
+    return RAW_DATA_SQL
