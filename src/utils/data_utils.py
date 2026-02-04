@@ -107,11 +107,9 @@ def one_hot_encode_assay_type(df):
 
 def drop_columns(df):
     COLUMNS_TO_DROP = [
-        "activity_id",
         "assay_id",
         "standard_units",
         "full_molformula",
-        "target_id",
     ]
 
     duplicated_cols = df.columns[df.columns.duplicated(keep="first")]

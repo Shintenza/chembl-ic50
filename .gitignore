@@ -2,3 +2,4 @@
 db/postgres_data
 db/init/chembl_36.dump
 data
+notebooks/scratchpad.ipynb

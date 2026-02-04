@@ -1,12 +1,10 @@
 from src.utils.raw_data_query import get_data_query
 from src.utils.data_utils import process_single_data_chunk
+from src.utils.consts import CLEANED_DATA_LOCATION, CHUNK_SIZE
 
 from sqlalchemy import create_engine
 import os
 import pandas as pd
-
-CHUNK_SIZE = 300000
-CLEANED_DATA_LOCATION = "/data/preprocessed"
 
 
 def get_and_preprocess_data():
