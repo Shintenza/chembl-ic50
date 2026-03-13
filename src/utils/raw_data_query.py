@@ -10,6 +10,8 @@ SELECT
     ass.confidence_score,
     ass.tid as target_id, 
     td.chembl_id,
+    td.target_type,
+    td.organism,
     cp.*
 FROM activities a
 JOIN assays ass ON a.assay_id = ass.assay_id 
@@ -23,7 +25,6 @@ AND cs.canonical_smiles IS NOT NULL
 AND a.standard_value IS NOT NULL
 AND a.standard_value > 0
 AND a.standard_units IS NOT NULL
-AND a.standard_units IN ('nM', 'ug.mL-1')
 AND a.standard_relation = '='
 AND a.potential_duplicate = 0
 AND md.black_box_warning = 0
