@@ -1,28 +1,15 @@
 import pandas as pd
-from rdkit import Chem
-from rdkit.Chem.Scaffolds import MurckoScaffold
 from glob import glob
+from utils.chem import get_scaffold
 
-
-
-def get_scaffold(smiles):
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    return MurckoScaffold.MurckoScaffoldSmiles(mol=mol, includeChirality=False)
-
-
-
-def create_split_map(data_path):
-    files = glob(f"{data_path}/batch_*.parquet")
+def create_split_map(data_path, data_file_prefix, split_map_name):
+    files = glob(f"{data_path}/{data_file_prefix}*.parquet")
     rows = []
 
     for f in files:
         df = pd.read_parquet(f, columns=["activity_id", "smiles"])
-        for rid, smi in zip(df.activity_id, df.smiles):
-            scaffold = get_scaffold(smi)
-            if scaffold:
-                rows.append((rid, scaffold))
+        df["scaffold"] = df.smiles.map(get_scaffold)
+        rows.extend(df[["activity_id", "scaffold"]].dropna().values.tolist())
 
     scaffold_df = pd.DataFrame(rows, columns=["activity_id", "scaffold"])
     scaffold_sizes = scaffold_df.groupby("scaffold").size().sort_values(ascending=False)
@@ -45,4 +32,4 @@ def create_split_map(data_path):
         count += size
 
     scaffold_df["split"] = scaffold_df.scaffold.map(scaffold_to_split)
-    scaffold_df[["activity_id", "split"]].to_parquet(f"{data_path}/split_map.parquet", index=False)
+    scaffold_df[["activity_id", "split"]].to_parquet(f"{data_path}/{split_map_name}", index=False)
