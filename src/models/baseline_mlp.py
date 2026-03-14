@@ -11,16 +11,12 @@ def train_baseline_mlp(
     data_files_location,
     splits_location,
     model,
-    criterion=nn.MSELoss,
-    optimizer=optim.Adam,
-    lr=0.001,
+    criterion,
+    optimizer,
     epochs=25,
     batch_size=128,
 ):
     splits_df = pd.read_parquet(splits_location)
-
-    loss_fn = criterion()
-    optim = optimizer(model.parameters, lr)
 
     for epoch in range(epochs):
         epoch_train_loss = 0.0
@@ -53,11 +49,11 @@ def train_baseline_mlp(
 
             model.train()
             for bX, by in loader:
-                optim.zero_grad()
+                optimizer.zero_grad()
                 preds = model(bX)
-                loss = loss_fn(preds, by)
+                loss = criterion(preds, by)
                 loss.backward()
-                optim.step()
+                optimizer.step()
 
                 epoch_train_loss += loss.item() * len(bX)
                 train_samples_count += len(bX)
@@ -73,7 +69,7 @@ def train_baseline_mlp(
 
                 with torch.no_grad():
                     val_preds = model(X_val_t)
-                    v_loss = loss_fn(val_preds, y_val_t)
+                    v_loss = criterion(val_preds, y_val_t)
 
                     epoch_val_loss += v_loss.item() * len(X_val_t)
                     val_samples_count += len(X_val_t)
